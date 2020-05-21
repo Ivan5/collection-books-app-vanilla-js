@@ -8,9 +8,23 @@ class Libro {
 }
 
 class UI {
-  static mostrarLibros() {}
+  static mostrarLibros() {
+    const libros = Datos.traerLibros();
+    libros.forEach((libro) => UI.agregarLibroLista(libro));
+  }
 
-  static agregarLibroLista(libro) {}
+  static agregarLibroLista(libro) {
+    const lista = document.querySelector("#libro-list");
+
+    const fila = document.createElement("tr");
+    fila.innerHTML = `
+      <td>${libro.titulo}</td>
+      <td>${libro.autor}</td>
+      <td>${libro.isbn}</td>
+      <td><a href="" class="btn btn-danger btn-sm delete">Eliminar</a></td>
+    `;
+    lista.appendChild(fila);
+  }
 
   static eliminarLibro() {}
 
@@ -55,6 +69,9 @@ class Datos {
   static removerLibro(isbn) {}
 }
 
+//Carga de la pagina
+document.addEventListener("DOMContentLoaded", UI.mostrarLibros());
+
 //Controlar el evento submit
 document.querySelector("#libro-form").addEventListener("submit", (e) => {
   e.preventDefault();
@@ -69,6 +86,7 @@ document.querySelector("#libro-form").addEventListener("submit", (e) => {
   } else {
     const libro = new Libro(titulo, autor, isbn);
     Datos.agregarLibro(libro);
+    UI.agregarLibroLista(libro);
     UI.limpiarCampos();
   }
 });
